@@ -1,0 +1,73 @@
+
+1.We are given a table consisting of two columns, Name, and Profession. We need to query all the names immediately followed by the first letter in the profession column enclosed in parenthesis
++------+--------+------------+
+| id   | name   | profession |
++------+--------+------------+
+|    1 | sam    | doctor     |
+|    2 | shyam  | actor      |
+|    3 | samuel | cricketer  |
+|    4 | sammy  | singer     |
++------+--------+------------+
+
+SELECT
+CONCAT(Name, ’(‘, SUBSTR(Profession, 1, 1), ’)’) 
+FROM table;
++---------------------------------------------+
+| concat(name,'(',substr(profession,1,1),')') |
++---------------------------------------------+
+| sam(d)                                      |
+| shyam(a)                                    |
+| samuel(c)                                   |
+| sammy(s)                                    |
++---------------------------------------------+
+
+
+2.How to display following using query?
+ 
+*
+ 
+**
+ 
+***
+
+
+SELECT lpad (‘*’, ROWNUM,’*’) FROM Student WHERE ROWNUM <4;
+
+3.how to write sql query for the below scenario
+I/p:ORACLE
+ 
+O/p:
+O
+R
+A
+C
+L
+E
+
+
+Select Substr(‘ORACLE’,Level,1) From Dual
+Connect By Level<= Length(‘ORACLE’);
+
+4.Write a query to fetch only the place name from the Address column of EmployeeInfo table.
+
+SELECT SUBSTRING(Address, 1, CHARINDEX('(',Address)) FROM EmployeeInfo;
+
+
+5.How to fetch common records from two tables
+
+
+Select studentID from student INTERSECT Select StudentID from Exam;
+
+
+6.Write an SQL query to create an empty table with the same structure as some other table.
+
+mysql> create table new_table as table employeedetails limit 0;
+
+7.Write a query to fetch top N records.
+
+SELECT TOP N * FROM EmployeePosition ORDER BY Salary DESC;
+
+
+
+
+
