@@ -1,0 +1,150 @@
+---creating the table---
+USE demo;
+
+CREATE TABLE employee
+(
+    id         INTEGER NOT NULL PRIMARY KEY,
+    first_name VARCHAR(10),
+    last_name  VARCHAR(10),
+    salary     DECIMAL(10, 2),
+    city       VARCHAR(20),
+)
+
+INSERT INTO employee
+VALUES      (1,
+             'Vinitha',
+             'B',
+             30000,
+             'Hyb');
+
+INSERT INTO employee
+VALUES      (2,
+             'Shalini',
+             'H',
+             50000,
+             'Secunderabad');
+
+INSERT INTO employee
+VALUES      (3,
+             'Dheepthi',
+             'K',
+             40000,
+             'California');
+
+INSERT INTO employee
+VALUES      (4,
+             'Bharan',
+             'B',
+             25000,
+             'jk');
+
+SELECT * FROM employee;
++----+------------+-----------+----------+--------------+
+| id | first_name | last_name | salary   | city         |
++----+------------+-----------+----------+--------------+
+|  1 | Vinitha    | B         | 30000.00 | Hyb          |
+|  2 | Shalini    | H         | 50000.00 | Secunderabad |
+|  3 | Dheepthi   | K         | 40000.00 | California   |
+|  4 | Bharan     | B         | 25000.00 | jk           |
++----+------------+-----------+----------+--------------+
+4 rows in set (0.00 sec)
+
+---Stored Procedure---
+
+USE `demo`;
+DELIMITER $$
+
+CREATE PROCEDURE `crudEmp`(
+id_1            INTEGER,
+first_name    VARCHAR(10),
+last_name     VARCHAR(10),
+salary        DECIMAL(10, 2),
+city          VARCHAR(20), 
+StatementType NVARCHAR(20))
+BEGIN
+IF StatementType = 'Insert'
+THEN
+	INSERT into employee 
+                        (id,
+                         first_name,
+                         last_name,
+                         salary,
+                         city)
+            VALUES     ( id_1,
+                         first_name,
+                         last_name,
+                         salary,
+                         city);
+END IF;
+IF StatementType = 'Select'
+	THEN
+		SELECT *
+            FROM   employee;
+END IF;
+IF StatementType = 'Update'
+	THEN
+		UPDATE employee
+            SET    first_name = first_name,
+                   last_name = last_name,
+                   salary = salary,
+                   city = city
+            WHERE  id = id_1;
+END IF;
+IF StatementType = 'Delete'
+	THEN
+		DELETE FROM employee
+            WHERE  id = id_1;
+END IF;
+
+
+END$$
+
+DELIMITER ;
+
+---calling the stored procedure---
+
+mysql>call crudEmp(5,"Abdul",null,60000.00,"chennai","insert");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM employee;
++----+------------+-----------+----------+--------------+
+| id | first_name | last_name | salary   | city         |
++----+------------+-----------+----------+--------------+
+|  1 | Vinitha    | B         | 30000.00 | Hyb          |
+|  2 | Shalini    | H         | 50000.00 | Secunderabad |
+|  3 | Dheepthi   | K         | 40000.00 | California   |
+|  4 | Bharan     | B         | 25000.00 | jk           |
+|  5 | Abdul      | NULL      | 60000.00 | chennai      |
++----+------------+-----------+----------+--------------+
+5 rows in set (0.00 sec
+
+mysql> call crudEmp(3,"Dheepthi","A",52000,"Secunderabad","update");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM employee;
++----+------------+-----------+----------+--------------+
+| id | first_name | last_name | salary   | city         |
++----+------------+-----------+----------+--------------+
+|  1 | Vinitha    | B         | 30000.00 | Hyb          |
+|  2 | Shalini    | H         | 50000.00 | Secunderabad |
+|  3 | Dheepthi   | A         | 52000.00 | Secunderabad |
+|  4 | Bharan     | B         | 25000.00 | jk           |
+|  5 | Abdul      | NULL      | 60000.00 | chennai      |
++----+------------+-----------+----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> call crudEmp(5,null,null,null,null,"delete");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> call crudEmp(null,null,null,null,null,"Select");
++----+------------+-----------+----------+--------------+
+| id | first_name | last_name | salary   | city         |
++----+------------+-----------+----------+--------------+
+|  1 | Vinitha    | B         | 30000.00 | Hyb          |
+|  2 | Shalini    | H         | 50000.00 | Secunderabad |
+|  3 | Dheepthi   | A         | 52000.00 | Secunderabad |
+|  4 | Bharan     | B         | 25000.00 | jk           |
++----+------------+-----------+----------+--------------+
+4 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
